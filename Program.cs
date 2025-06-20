@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Microsoft.OpenApi.Models; // Asegúrate de tener este using
 
 
 
@@ -18,6 +19,7 @@ builder.Services.AddScoped<MangaService>();
 builder.Services.AddScoped<PrestamoService>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySQL(connectionString!));
+
 
 
 
@@ -38,9 +40,10 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(
-                                     Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                                    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     };
 });
+
 
 
 builder.Services.AddSwaggerGen(options =>
@@ -56,7 +59,34 @@ builder.Services.AddSwaggerGen(options =>
             Url = new Uri("https://tuwebsite.com")
         }
     });
+
+    // 🔐 Configurar JWT en Swagger
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Introduce tu token como: **Bearer &lt;token&gt;**"
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
 });
+
 
 var app = builder.Build();
 

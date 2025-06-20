@@ -69,3 +69,4 @@ C:\Users\erick\OneDrive\Tareas\Universidad\Programacion\Cuatri 3\Api_Mangas\home
 C:\Users\erick\OneDrive\Tareas\Universidad\Programacion\Cuatri 3\Api_Mangas\home\MiMangaBot\obj\Debug\net8.0\MiMangaBot.pdb
 C:\Users\erick\OneDrive\Tareas\Universidad\Programacion\Cuatri 3\Api_Mangas\home\MiMangaBot\obj\Debug\net8.0\MiMangaBot.genruntimeconfig.cache
 C:\Users\erick\OneDrive\Tareas\Universidad\Programacion\Cuatri 3\Api_Mangas\home\MiMangaBot\obj\Debug\net8.0\ref\MiMangaBot.dll
+C:\Users\erick\OneDrive\Tareas\Universidad\Programacion\Cuatri 3\Api_Mangas\home\MiMangaBot\obj\Debug\net8.0\MiMangaBot.sourcelink.json

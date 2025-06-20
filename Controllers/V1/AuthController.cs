@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using MiMangaBot.Models; // Asegúrate de que esta línea coincida con la ubicación de LoginRequest
 
 namespace MiMangaBot.Controllers.V1
 {
@@ -20,16 +21,16 @@ namespace MiMangaBot.Controllers.V1
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest request)
         {
-            // Aquí validas las credenciales (puedes usar una tabla real en lugar de esto)
             if (request.Username == "admin" && request.Password == "1234")
             {
+                // Claims que irán dentro del token
                 var claims = new[]
                 {
                     new Claim(JwtRegisteredClaimNames.Sub, request.Username),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
 
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
                 var token = new JwtSecurityToken(
@@ -37,21 +38,15 @@ namespace MiMangaBot.Controllers.V1
                     audience: _config["Jwt:Audience"],
                     claims: claims,
                     expires: DateTime.UtcNow.AddHours(1),
-                    signingCredentials: creds
-                );
+                    signingCredentials: creds);
 
-                var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-
-                return Ok(new { token = tokenString });
+                return Ok(new
+                {
+                    token = new JwtSecurityTokenHandler().WriteToken(token)
+                });
             }
 
             return Unauthorized(new { message = "Credenciales inválidas" });
         }
-    }
-
-    public class LoginRequest
-    {
-        public string Username { get; set; } = "";
-        public string Password { get; set; } = "";
     }
 }

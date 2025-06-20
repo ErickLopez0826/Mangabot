@@ -2,9 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MiMangaBot.Data;
 using MiMangaBot.Models;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace MiMangaBot.Controllers.V1
 {
+    [Authorize]
     [ApiController]
     [Route("api/v1/[controller]")]
     public class MangaController : ControllerBase
